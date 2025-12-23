@@ -1,0 +1,22 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: n8n
+resources:
+  - namespace.yaml
+  - secret.yaml
+  - database.yaml
+  - postgres.yaml
+  - dragonfly.yaml
+  - n8n-main.yaml
+  - ../../infrastructure/bitnami-redis
+configMapGenerator:
+  - name: n8n-config
+    literals:
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres-db-rw
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=n8n
+      - EXECUTIONS_MODE=queue
+      - QUEUE_BULL_REDIS_HOST=dragonfly
+      - QUEUE_BULL_REDIS_PORT=6379
